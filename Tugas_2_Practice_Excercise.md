@@ -6,7 +6,6 @@
 **POLITEKNIK ELEKTRONIKA NEGERI SURABAYA (PENS)**  
 **TAHUN 2025**  
 
----
 
 ### **1.1 What are the three main purposes of an operating system?**
 
@@ -14,7 +13,6 @@
 2. **Abstraction and Simplification:** It provides a simplified interface for users and applications to interact with the hardware, hiding the complexities of the underlying system.
 3. **Security and Protection:** The operating system ensures that different processes and users do not interfere with each other, providing a secure environment.
 
----
 
 ### **1.2 When is it appropriate for the operating system to forsake efficiency and "waste" resources? Why is such a system not really wasteful?**
 
@@ -25,7 +23,6 @@ It is appropriate to "waste" resources when prioritizing user experience, system
 
 Such systems are not truly wasteful because the "wasted" resources serve critical purposes like reliability, performance, and security, which outweigh the cost of inefficiency.
 
----
 
 ### **1.3 What is the main difficulty that a programmer must overcome in writing an operating system for a real-time environment?**
 
@@ -34,7 +31,6 @@ The main difficulty is ensuring **predictable and deterministic response times**
 - Minimizing latency and jitter.
 - Handling interrupts and I/O operations without causing delays.
 
----
 
 ### **1.4 Should the operating system include applications such as web browsers and mail programs? Argue both sides.**
 
@@ -48,7 +44,6 @@ The main difficulty is ensuring **predictable and deterministic response times**
 - **Flexibility:** Users may prefer alternative applications, and pre-installed apps limit choice.
 - **Security Risks:** More applications increase the attack surface for potential vulnerabilities.
 
----
 
 ### **1.5 How does the distinction between kernel mode and user mode function as a rudimentary form of protection (security)?**
 
@@ -56,8 +51,6 @@ The main difficulty is ensuring **predictable and deterministic response times**
 - **User Mode:** Applications run in user mode, with restricted access to hardware and sensitive areas of the system.
 
 This separation prevents user applications from interfering with the OS or other applications, ensuring system stability and security.
-
----
 
 ### **1.6 Which of the following instructions should be privileged?**
 
@@ -73,21 +66,18 @@ Non-privileged instructions:
 - **b. Read the clock.**
 - **d. Issue a trap instruction.**
 
----
 
 ### **1.7 Describe two difficulties that could arise from placing the OS in a memory partition that cannot be modified.**
 
 1. **Limited Flexibility:** The OS cannot dynamically adjust its memory usage, making it difficult to handle varying workloads or new features.
 2. **Performance Bottlenecks:** If the OS cannot modify its own memory, it may struggle to optimize performance or respond to system events efficiently.
 
----
 
 ### **1.8 What are two possible uses of multiple modes of operation in CPUs?**
 
 1. **Enhanced Security:** Additional modes can provide finer-grained access control, isolating critical processes from less trusted ones.
 2. **Specialized Operations:** Modes can be designed for specific tasks, such as virtualization or real-time processing, improving efficiency.
 
----
 
 ### **1.9 How could timers be used to compute the current time?**
 
@@ -96,7 +86,6 @@ Timers can be used to track elapsed time by counting clock ticks. For example:
 - The OS records the number of ticks since a known start time (e.g., system boot).
 - By multiplying the tick count by the interval between ticks, the OS can calculate the current time.
 
----
 
 ### **1.10 Give two reasons why caches are useful. What problems do they solve? What problems do they cause?**
 
@@ -116,4 +105,3 @@ Timers can be used to track elapsed time by counting clock ticks. For example:
 - **Cost:** Larger caches are more expensive.
 - **Diminishing Returns:** Beyond a certain size, the performance gains do not justify the cost.
 
----
