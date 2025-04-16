@@ -18,6 +18,62 @@ Dalam implementasi ini, array dibagi menjadi beberapa bagian, dan setiap bagian 
 
 Kelebihan utama dari pendekatan ini adalah kemudahan dalam penggunaan dan portabilitas yang tinggi. Java menyembunyikan detail teknis dari sistem operasi sehingga developer dapat fokus pada logika program tanpa harus memahami detail *thread management* seperti pada bahasa tingkat rendah.
 
+# Program Java: SumTask.java
+
+Program ini menunjukkan cara menggunakan thread untuk menjumlahkan elemen array secara paralel menggunakan `Callable` dan `ExecutorService` di Java.
+
+```java
+import java.util.concurrent.*;
+
+public class SumTask implements Callable<Long> {
+    private int[] array;
+    private int start, end;
+
+    public SumTask(int[] array, int start, int end) {
+        this.array = array;
+        this.start = start;
+        this.end = end;
+    }
+
+    @Override
+    public Long call() {
+        long sum = 0;
+        for (int i = start; i < end; i++) {
+            sum += array[i];
+        }
+        return sum;
+    }
+
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
+        int[] array = new int[1000000];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = 1; // simplifikasi agar hasil diketahui: 1 juta
+        }
+
+        int numThreads = 4;
+        ExecutorService executor = Executors.newFixedThreadPool(numThreads);
+        Future<Long>[] results = new Future[numThreads];
+
+        int chunkSize = array.length / numThreads;
+        for (int i = 0; i < numThreads; i++) {
+            int start = i * chunkSize;
+            int end = (i == numThreads - 1) ? array.length : start + chunkSize;
+            results[i] = executor.submit(new SumTask(array, start, end));
+        }
+
+        long total = 0;
+        for (Future<Long> result : results) {
+            total += result.get();
+        }
+
+        executor.shutdown();
+
+        System.out.println("Total sum: " + total);
+    }
+}
+```
+## B. Penerapan Thread di Linux (thrd-posix.c) dan Windows (thrd-win32.c)
+
 ## 2. Penerapan Thread di Linux: POSIX (thrd-posix.c)
 
 Pada sistem Linux, pembuatan *thread* biasanya dilakukan dengan menggunakan pustaka **POSIX Threads** atau sering disingkat **pthreads**. Dalam contoh `thrd-posix.c`, sebuah thread dibuat dengan fungsi `pthread_create`, kemudian dieksekusi bersamaan dengan thread utama. Setelah selesai, `pthread_join` digunakan untuk menunggu hingga thread tersebut selesai sebelum program utama melanjutkan proses.
