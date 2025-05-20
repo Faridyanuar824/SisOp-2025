@@ -1,4 +1,3 @@
-
 # LAPORAN SISTEM OPERASI  
 ## SRTF (Shortest Remaining Time First)
 
@@ -10,9 +9,9 @@
 ### Dosen Pengajar:
 Dr. Ferry Astika Saputra, ST, M.Sc
 
-> PROGRAM STUDI D3 TEKNIK INFORMATIKA  
-> POLITEKNIK ELEKTRONIKA NEGERI SURABAYA (PENS)  
-> TAHUN 2024
+##PROGRAM STUDI D3 TEKNIK INFORMATIKA  
+POLITEKNIK ELEKTRONIKA NEGERI SURABAYA (PENS)  
+TAHUN 2024
 
 ---
 
@@ -128,52 +127,85 @@ Membaca input proses dan mengisi nilai awal `rt` dengan `bt`.
 
 ### Fungsi `main`
 
-**Inisialisasi:**
-Deklarasi array proses, variabel rata-rata TAT dan WT, serta variabel kontrol.
-
-**Input proses:**
+**inisialisasi dengan Deklarasi array**
 ```c
-for (int i = 0; i < n; i++)
-    p[i] = read(i + 1);
+int main()
+{
+    struct proc p[10],temp;
+    float avgtat=0,avgwt=0;
+    int n,s,remain=0,time;
+
 ```
+Code diatas merupakan fungsi main bagian inisialisasi dengan Deklarasi array proses (maks 10 proses), Variabel untuk menyimpan rata-rata TAT dan WT, Variabel kontrol algoritma
 
-**Sorting proses berdasarkan Arrival Time:**
-Menggunakan bubble sort.
 
-**Simulasi Penjadwalan SRTF:**
+**Input Proses:**
 ```c
-for (time = 0; remain != n; time++) {
-    ...
+    printf("<--SRTF Scheduling Algorithm (Preemptive)-->\n");
+    printf("Enter Number of Processes: ");
+    scanf("%d",&n);
+    for(int i=0;i<n;i++)
+        p[i]=read(i+1);
+
+```
+Code diatas merupakan fungsi main bagian input pproses dengan membaca jumlah proses dan detail setiap proses
+
+```c
+    for(int i=0;i<n-1;i++)
+        for(int j=0;j<n-i-1;j++)    
+            if(p[j].at>p[j+1].at)
+            {
+            temp=p[j];
+            p[j]=p[j+1];
+            p[j+1]=temp;
+            }
+
+```
+Code diatas merupakan fungsi main bagian sorting proses, dengan Mengurutkan proses berdasarkan arrival time (AT) menggunakan bubble sort
+
+```c
+    printf("\nProcess\t\tAT\tBT\tCT\tTAT\tWT\n");
+    p[9].rt=MAX; // Inisialisasi proses dummy
+    for(time=0;remain!=n;time++)
+    {
+        s=9; // Indeks proses dummy
+// Mencari proses dengan sisa waktu tersingkat yang sudah datang
+        for(int i=0;i<n;i++)
+            if(p[i].at<=time&&p[i].rt<p[s].rt&&p[i].rt>0)
+                s=i;
+        p[s].rt--; // Eksekusi proses 1 unit waktu
+// Jika proses selesai
+        if(p[s].rt==0)
+        {
+            remain++;
+            p[s].ct=time+1;
+            p[s].tat=p[s].ct-p[s].at;
+            avgtat+=p[s].tat;
+            p[s].wt=p[s].tat-p[s].bt;
+            avgwt+=p[s].wt;
+            printf("P%d\t\t%d\t%d\t%d\t%d\t%d\n",p[s].no,p[s].at,p[s].bt,p[s].ct,p[s].tat,p[s].wt);
+        }
+    }
+
+```
+Kemudian code diatas merupakan simulasi SRTF dengan mencari setiap satuan waktu kemudian mencari proses dengan sisa waktu tersingjat yang sudah datang kemudian kurangi sisa waktu proses tersebut, jika sisa waktu = 0, proses selesai kemudian menghitung completion time, turn around time, dan waiting time, tampilkan hasil proses tersebut
+
+```c
+    avgtat/=n,avgwt/=n;
+    printf("\nAverage TurnAroundTime=%f\nAverage WaitingTime=%f",avgtat,avgwt);
 }
+
+
 ```
-Menjalankan simulasi tiap satuan waktu, memilih proses dengan sisa waktu tersingkat dan mengeksekusinya satu per satu.
-
-Jika proses selesai (`rt == 0`), dihitung `ct`, `tat`, dan `wt`, lalu ditampilkan.
-
-**Rata-rata:**
-Menghitung dan mencetak rata-rata `TurnAround Time` dan `Waiting Time`.
+Menghitung dan menampilkan rata-rata TAT dan WT
 
 ---
 
 ## KESIMPULAN
 
-Kode di atas merupakan implementasi algoritma penjadwalan **Shortest Remaining Time First (SRTF)** secara **preemptive**.
+Kode di atas merupakan implementasi algoritma penjadwalan proses Shortest Remaining Time First (SRTF) yang bersifat preemptive. Program ini menggunakan struktur data untuk merepresentasikan setiap proses dengan atribut seperti waktu kedatangan, waktu eksekusi, sisa waktu eksekusi, waktu penyelesaian, serta waktu tunggu dan waktu putar. Algoritma ini bekerja dengan cara selalu memilih proses yang memiliki sisa waktu eksekusi tersingkat dari proses-proses yang sudah tiba pada sistem, kemudian mengeksekusinya secara preemptive jika ditemukan proses lain dengan sisa waktu lebih pendek. Setiap kali proses selesai dijalankan, program akan menghitung berbagai metrik kinerja seperti completion time, turnaround time, dan waiting time.
 
-Algoritma bekerja dengan memilih proses dengan **sisa waktu eksekusi tersingkat** dari proses yang telah datang dan mengeksekusinya.
+Program ini diawali dengan pengurutan proses berdasarkan waktu kedatangannya menggunakan algoritma bubble sort. Kemudian simulasi dijalankan satuan waktu demi satuan waktu hingga semua proses selesai dieksekusi. Pada akhir eksekusi, program menampilkan detail setiap proses beserta perhitungan rata-rata turnaround time dan waiting time. Meskipun implementasinya sudah benar dan terstruktur dengan baik, kode ini memiliki beberapa keterbatasan seperti jumlah proses maksimum yang tetap (10 proses), kurangnya penanganan input tidak valid, dan tidak adanya visualisasi grafik penjadwalan seperti Gantt Chart.
 
-Langkah-langkah utama:
-- Input data proses
-- Sorting berdasarkan arrival time
-- Simulasi eksekusi preemptive
-- Perhitungan dan tampilan hasil
-
-**Kelebihan:**
-- Mempercepat penyelesaian proses pendek
-- Memberikan rata-rata waktu tunggu dan putar yang optimal
-
-**Kekurangan:**
-- Maksimal hanya untuk 10 proses
-- Tidak ada validasi input
-- Tidak menyertakan visualisasi (misalnya Gantt Chart)
 
 ---
